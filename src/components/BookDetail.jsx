@@ -6,6 +6,7 @@ import { addToCartAction, addToCartActionWithThunk } from '../redux/actions'
 
 const mapStateToProps = (state) => ({
   userName: state.user.name,
+  booksInCart: state.cart.products,
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -30,6 +31,10 @@ class BookDetail extends Component {
   }
 
   render() {
+    const isAlreadyInCart = this.props.booksInCart.find(
+      (b) => b.id === this.state.book.id
+    )
+
     return (
       <div className='mt-3'>
         {this.state.book ? (
@@ -64,8 +69,11 @@ class BookDetail extends Component {
                   <Button
                     color='primary'
                     onClick={() => this.props.addToCart(this.state.book)}
+                    // .find() returns an element or undefined
+                    // we need true or false
+                    disabled={isAlreadyInCart}
                   >
-                    ADD TO CART
+                    {isAlreadyInCart ? 'ALREADY ADDED' : 'ADD TO CART'}
                   </Button>
                 ) : (
                   <div>You need to log in for purchasing this book!</div>

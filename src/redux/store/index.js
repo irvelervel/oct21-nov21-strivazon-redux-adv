@@ -18,6 +18,8 @@ export const initialState = {
   },
   book: {
     stock: [],
+    isError: false,
+    isLoading: true,
   },
 }
 

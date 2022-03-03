@@ -4,6 +4,9 @@
 export const ADD_TO_CART = 'ADD_TO_CART'
 export const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 export const SET_USER_NAME = 'SET_USER_NAME'
+export const GET_BOOKS = 'GET_BOOKS'
+export const GET_BOOKS_ERROR = 'GET_BOOKS_ERROR'
+export const GET_BOOKS_LOADING = 'GET_BOOKS_LOADING'
 
 export const addToCartAction = (bookToAdd) => ({
   type: ADD_TO_CART,
@@ -50,24 +53,48 @@ export const addToCartActionWithThunk = (bookToAdd) => {
 
 export const getBooksAction = () => {
   console.log('in getBooksAction')
-  return async (dispatch) => {
-    try {
-      let response = await fetch(
-        'https://striveschool-api.herokuapp.com/food-books'
-      )
-      if (response.ok) {
-        let data = await response.json()
-        console.log('BOOKS IN ACTION CREATOR', data)
-        // here we're going to dispatch the action with data as the payload
-      } else {
-        console.log('error happened fetching the books')
+  return (dispatch, getState) => {
+    const stateRightNow = getState()
+    // getState() gives you back the entire state of the redux store
+    // you can also check it for deciding which actions to dispatch
+    setTimeout(async () => {
+      try {
+        let response = await fetch(
+          'https://striveschool-api.herokuapp.com/food-books'
+        )
+        if (response.ok) {
+          let data = await response.json()
+          console.log('BOOKS IN ACTION CREATOR', data)
+          // here we're going to dispatch the action with data as the payload
+          dispatch({
+            type: GET_BOOKS,
+            payload: data,
+          })
+          dispatch({
+            type: GET_BOOKS_LOADING,
+          })
+        } else {
+          console.log('error happened fetching the books')
+          // maybe here we can dispatch another action!
+          // an ERROR action :)
+          dispatch({
+            type: GET_BOOKS_ERROR,
+          })
+          dispatch({
+            type: GET_BOOKS_LOADING,
+          })
+        }
+      } catch (error) {
+        console.log(error)
         // maybe here we can dispatch another action!
         // an ERROR action :)
+        dispatch({
+          type: GET_BOOKS_ERROR,
+        })
+        dispatch({
+          type: GET_BOOKS_LOADING,
+        })
       }
-    } catch (error) {
-      console.log(error)
-      // maybe here we can dispatch another action!
-      // an ERROR action :)
-    }
+    }, 1000)
   }
 }

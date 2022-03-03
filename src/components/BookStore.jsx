@@ -5,7 +5,9 @@ import { Col, Row } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { getBooksAction } from '../redux/actions'
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+  booksFromReduxStore: state.book.stock,
+})
 
 const mapDispatchToProps = (dispatch) => ({
   getBooks: () => {
@@ -17,7 +19,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 class BookStore extends Component {
   state = {
-    books: [],
+    // books: [],
     bookSelected: null,
   }
 
@@ -48,7 +50,9 @@ class BookStore extends Component {
           <BookList
             bookSelected={this.state.bookSelected}
             changeBook={this.changeBook}
-            books={this.state.books}
+            // books={this.state.books}
+            // this should be replaced with the book.stock array into the redux store!
+            books={this.props.booksFromReduxStore}
           />
         </Col>
         <Col md={8}>

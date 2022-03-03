@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import Button from 'react-bootstrap/Button'
+import Alert from 'react-bootstrap/Alert'
+import Spinner from 'react-bootstrap/Spinner'
 import Form from 'react-bootstrap/Form'
 import { FaShoppingCart } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
@@ -12,6 +14,8 @@ const mapStateToProps = (state) => ({
   // every property in this object will be a prop for CartIndicator
   cartLength: state.cart.products.length,
   userName: state.user.name,
+  bookFetchFailed: state.book.isError,
+  areBooksStillFetching: state.book.isLoading,
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -28,7 +32,11 @@ const CartIndicator = (props) => {
 
   return (
     <div className='ml-auto mt-2'>
-      {props.userName ? (
+      {props.areBooksStillFetching ? (
+        <Spinner variant='success' animation='border' />
+      ) : props.bookFetchFailed ? (
+        <Alert variant='danger'>Fetch error, try again</Alert>
+      ) : props.userName ? (
         <Button color='primary' onClick={() => navigate('/cart')}>
           <FaShoppingCart />
           <span className='ml-2'>{props.cartLength}</span>
