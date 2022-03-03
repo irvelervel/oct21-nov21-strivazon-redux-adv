@@ -1,6 +1,12 @@
-import { createStore, combineReducers } from 'redux'
+import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
 import cartReducer from '../reducers/cartReducer'
 import userReducer from '../reducers/userReducer'
+import bookReducer from '../reducers/bookReducer'
+
+import thunk from 'redux-thunk'
+
+const aComposeFunctionThatAlwaysWorks =
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 export const initialState = {
   // let's create a carte "slice"
@@ -10,17 +16,21 @@ export const initialState = {
   user: {
     name: '',
   },
+  book: {
+    stock: [],
+  },
 }
 
 const bigReducer = combineReducers({
   cart: cartReducer,
   user: userReducer,
+  book: bookReducer,
 })
 
 export const configureStore = createStore(
   bigReducer,
   initialState,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  aComposeFunctionThatAlwaysWorks(applyMiddleware(thunk))
 )
 // 1) the main reducer function
 // 2) the initial state for the redux store

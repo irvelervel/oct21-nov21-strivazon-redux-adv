@@ -2,7 +2,7 @@ import { Component } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import { addToCartAction } from '../redux/actions'
+import { addToCartAction, addToCartActionWithThunk } from '../redux/actions'
 
 const mapStateToProps = (state) => ({
   userName: state.user.name,
@@ -12,7 +12,7 @@ const mapDispatchToProps = (dispatch) => ({
   // here we're going to write method for DISPATCHING ACTIONS in BookDetail
   // for adding an element to the products array into the cart slice of the store we need to dispatch an action!
   addToCart: (bookToAdd) => {
-    dispatch(addToCartAction(bookToAdd))
+    dispatch(addToCartActionWithThunk(bookToAdd))
   },
 })
 
